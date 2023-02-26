@@ -38,9 +38,16 @@ int main()
 	// Added code start
 	// Define vertices positions
 	float vertices[] = {
+		 0.5f, -0.5f, 0.0f,
+		 0.5f,  0.5f, 0.0f,
 		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
+		-0.5f,  0.5f, 0.0f
+	};
+
+	// Define indices
+	unsigned int indices[] = {
+		0, 1, 2,
+		1, 2, 3
 	};
 
 	// Vertex Buffer Object & Vertex Array Buffer
@@ -48,9 +55,13 @@ int main()
 	glGenBuffers(1, &VBO);
 	unsigned int VAO;
 	glGenVertexArrays(1, &VAO);
+	unsigned int IBO;
+	glGenBuffers(1, &IBO);
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// Linking vertex attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -120,11 +131,13 @@ int main()
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);		// Display in WireFrame Mode
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
