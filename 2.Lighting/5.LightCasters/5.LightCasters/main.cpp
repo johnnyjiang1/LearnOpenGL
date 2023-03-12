@@ -228,16 +228,16 @@ int main()
 
 		glm::vec3 lightColor(1.0f);
 
-		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
-		glm::vec3 ambientColor = lightColor * glm::vec3(0.2f);
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.8f);
+		glm::vec3 ambientColor = lightColor * glm::vec3(0.1f);
 
 		glUniform3f(glGetUniformLocation(objectShader.ID, "light.ambient"), ambientColor.x, ambientColor.y, ambientColor.z);
 		glUniform3f(glGetUniformLocation(objectShader.ID, "light.diffuse"), diffuseColor.x, diffuseColor.y, diffuseColor.z);
 		glUniform3f(glGetUniformLocation(objectShader.ID, "light.specular"), 1.0f, 1.0f, 1.0f);
-		glUniform3f(glGetUniformLocation(objectShader.ID, "light.position"), lightPos.x, lightPos.y, lightPos.z);
-		glUniform1f(glGetUniformLocation(objectShader.ID, "light.constant"), 1.0f);
-		glUniform1f(glGetUniformLocation(objectShader.ID, "light.linear"), 0.09f);
-		glUniform1f(glGetUniformLocation(objectShader.ID, "light.quadratic"), 0.032f);
+		glUniform3f(glGetUniformLocation(objectShader.ID, "light.position"), camera.Position.x, camera.Position.y, camera.Position.z);
+		glUniform3f(glGetUniformLocation(objectShader.ID, "light.direction"), camera.Front.x, camera.Front.y, camera.Front.z);
+		glUniform1f(glGetUniformLocation(objectShader.ID, "light.cutOff"), glm::cos(glm::radians(12.5f)));
+		glUniform1f(glGetUniformLocation(objectShader.ID, "light.outerCutOff"), glm::cos(glm::radians(30.0f)));
 		glUniform3f(glGetUniformLocation(objectShader.ID, "viewPos"), camera.Position.x, camera.Position.y, camera.Position.z);
 
 		glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f);
@@ -263,18 +263,18 @@ int main()
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
-		glm::mat4 model(1.0f);
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.2f));
-		lightShader.use();
-		glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(proj));
+		//glm::mat4 model(1.0f);
+		//model = glm::translate(model, lightPos);
+		//model = glm::scale(model, glm::vec3(0.2f));
+		//lightShader.use();
+		//glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		//glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		//glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(proj));
 
-		glUniform3f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
+		//glUniform3f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
 
-		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//glBindVertexArray(lightVAO);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
